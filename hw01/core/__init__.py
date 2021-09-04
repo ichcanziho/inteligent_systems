@@ -1,0 +1,1 @@
+from hw01.core.game import Game
