@@ -54,15 +54,16 @@ class Game:
 
     @staticmethod
     def print_solution(solution):
+
         path = [solution]
         parent = solution.parent
+
         while parent:
             path.append(parent)
             parent = parent.parent
 
-        for t in range(len(path)):
-            state = path[len(path) - t - 1]
-            print(str(state))
+        for node in reversed(path):
+            print(str(node))
 
     @staticmethod
     def search_solution(initial_state, method):
