@@ -1,4 +1,5 @@
 class Game:
+
     def __init__(self, cannibalLeft, missionaryLeft, boat, cannibalRight, missionaryRight, boat_capacity=2):
         self.cannibalLeft = cannibalLeft
         self.missionaryLeft = missionaryLeft
@@ -38,10 +39,12 @@ class Game:
         for move in moves:
             if state.boat == "left":
                 new_state = Game(state.cannibalLeft - move[cannibal], state.missionaryLeft - move[missioner], 'right',
-                                 state.cannibalRight + move[cannibal], state.missionaryRight + move[missioner])
+                                 state.cannibalRight + move[cannibal], state.missionaryRight + move[missioner],
+                                 state.capacity)
             else:
                 new_state = Game(state.cannibalLeft + move[cannibal], state.missionaryLeft + move[missioner], 'left',
-                                 state.cannibalRight - move[cannibal], state.missionaryRight - move[missioner])
+                                 state.cannibalRight - move[cannibal], state.missionaryRight - move[missioner],
+                                 state.capacity)
 
             if new_state.is_valid():
                 new_state.parent = state
