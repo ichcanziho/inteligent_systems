@@ -76,14 +76,7 @@ class Game:
             explored.append(state)
             children = Game.generate_successors(state)
             for child in children:
-                new_node = True
-                for node in frontier:
-                    if node == child:
-                        new_node = False
-                for node in explored:
-                    if node == child:
-                        new_node = False
-                if new_node:
+                if (child not in explored) and (child not in frontier):
                     if method == "DFS":
                         frontier.insert(0, child)
                     elif method == "BFS":
@@ -95,9 +88,6 @@ class Game:
         return self.cannibalLeft == other.cannibalLeft and self.missionaryLeft == other.missionaryLeft \
                and self.boat == other.boat and self.cannibalRight == other.cannibalRight \
                and self.missionaryRight == other.missionaryRight
-
-    def __hash__(self):
-        return hash((self.cannibalLeft, self.missionaryLeft, self.boat, self.cannibalRight, self.missionaryRight))
 
     def __str__(self):
         name = f'({self.cannibalLeft},{self.missionaryLeft},{self.boat},{self.cannibalRight},{self.missionaryRight})'
