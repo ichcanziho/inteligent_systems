@@ -44,6 +44,76 @@ class Sudoku:
         bo = self.board_priority
         self.sboard(bo)
 
+    def check_row(self, n_row):
+        row = [self.board[n_row][i] for i in range(9)]
+        print(row)
+        coords = [(n_row, i) for i in range(9) if self.board[n_row][i] == 0]
+        self.try_priority(coords)
+
+    def check_col(self, n_col):
+        column = [self.board[i][n_col] for i in range(9)]
+        print(column)
+        coords = [(i, n_col) for i in range(9) if self.board[i][n_col] == 0]
+        self.try_priority(coords)
+
+    def try_priority(self, coords):
+        priority = [self.get_cell_priority(y, x) for y, x in coords]
+        priority = [list(x) for x in priority]
+        priority.sort()
+        max_iter = 10
+        iterador = 0
+        while priority:
+            print(len(priority), priority)
+            visited = set()
+            index = 0
+            for p, value, coords in priority:
+                if p == 1:
+                    int_value = list(value)[0]
+                    self.board[coords[0]][coords[1]] = int_value
+                    visited.add(int_value)
+                    priority.pop(index)
+                index += 1
+
+            j = 0
+            for element in priority:
+                new_set = element[1] - visited
+                new_priority = len(new_set)
+                priority[j][0] = new_priority
+                priority[j][1] = new_set
+                j += 1
+            priority.sort()
+            if iterador >= max_iter:
+                break
+            iterador += 1
+        print("chido")
+        self.show_board()
+
+    def get_0s_coords(self):
+        coords = []
+        for ys in range(9):
+            for xs in range(9):
+                if self.board[ys][xs] == 0:
+                    coords.append([ys, xs])
+        return coords
+
+    def first_check(self):
+
+        while True:
+            coords = self.get_0s_coords()
+            priority = [self.get_cell_priority(y, x) for y, x in coords]
+            priority = [list(x) for x in priority]
+            priority.sort()
+            _continue = True
+            ones = [val for val in priority if val[0] == 1]
+            print(len(ones), ones)
+            for p, value, coords in ones:
+                int_value = list(value)[0]
+                print(p, value, coords)
+                self.board[coords[0]][coords[1]] = int_value
+            self.show_board()
+            if len(ones) == 0:
+                break
+
     def get_cell_priority(self, y, x):
 
         # get the row vector
@@ -67,14 +137,14 @@ class Sudoku:
         frees = set(row) | set(column) | set(quadrant)
         frees = alls - frees
 
-        return len(frees), frees
+        return len(frees), frees, (y,x)
 
     def update_board_priority(self):
         for ys in range(9):
             for xs in range(9):
                 value = self.board[ys][xs]
                 if value == 0:
-                    priority, _ = self.get_cell_priority(ys, xs)
+                    priority, _,_ = self.get_cell_priority(ys, xs)
                     self.board_priority[ys][xs] = priority
                 else:
                     self.board_priority[ys][xs] = 0
