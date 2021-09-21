@@ -11,6 +11,6 @@ def main():
     game.check_col(7)
 
 
-56
+    
 if __name__ == '__main__':
     main()
